@@ -36,6 +36,27 @@
   }
   fit();
   new ResizeObserver(fit).observe(el);
+
+  // Light / dark theme, driven by the portfolio's toggle. The parent page sends
+  // { type: "mind-theme", theme: "light" | "dark" }; ?theme=dark also works.
+  var THEMES = {
+    light: { bg: '#ffffff', wire: '#c8c8c8' },
+    dark:  { bg: '#000000', wire: '#575757' }
+  };
+  var current = 'light';
+  function setTheme(name) {
+    var t = THEMES[name];
+    if (!t || name === current) return;
+    current = name;
+    document.body.style.background = t.bg;
+    gallery.update({ background: { color: t.bg }, wireframe: { color: t.wire } });
+  }
+  setTheme(new URLSearchParams(location.search).get('theme') || 'light');
+  window.addEventListener('message', function (e) {
+    if (e.data && e.data.type === 'mind-theme') setTheme(e.data.theme);
+  });
+  // ask the parent page which theme it's on (it may have loaded before us)
+  if (window.parent !== window) window.parent.postMessage({ type: 'mind-theme-request' }, '*');
 </script>
 </body>
 </html>
