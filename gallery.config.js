@@ -1,5 +1,5 @@
 // DesignRigs Gallery configuration (exported from designrigs.com/3d-gallery-generator)
-// Posters are pulled from mindunter.framer.website. Background set to #000000 to match the site.
+// Posters are pulled from mindunter.framer.website. White background and light wireframe to match the light-mode site.
 window.GALLERY_CONFIG = {
   "shape": {
     "type": "sphere",
@@ -99,7 +99,7 @@ window.GALLERY_CONFIG = {
   },
   "wireframe": {
     "enabled": true,
-    "color": "#575757",
+    "color": "#c8c8c8",
     "thickness": 0.01
   },
   "loopImages": true,
@@ -121,7 +121,7 @@ window.GALLERY_CONFIG = {
     "distance": 14
   },
   "background": {
-    "color": "#000000"
+    "color": "#ffffff"
   },
   "dof": {
     "enabled": true,
