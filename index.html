@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mindunter Studios | Selected Works</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
+  #gallery { position: absolute; inset: 0; touch-action: none; }
+</style>
+</head>
+<body>
+<div id="gallery"></div>
+<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+<script src="gallery.config.js"></script>
+<script src="designrigs-gallery.js"></script>
+<script>
+  var el = document.getElementById('gallery');
+  var gallery = DesignRigsGallery.create(el, window.GALLERY_CONFIG);
+
+  // Responsive fit: on tall/narrow screens pull the camera back so the whole
+  // globe stays in frame, and move the focus with it so the front stays sharp.
+  // Globe radius is 6 with posters ~1.4 tall; the camera's vertical FOV is 50°.
+  var BASE = window.GALLERY_CONFIG.camera.distance;
+  var FOCUS_OFFSET = BASE - window.GALLERY_CONFIG.dof.focusDistance;
+  var BLUR = window.GALLERY_CONFIG.dof.amount;
+  function fit() {
+    var r = el.getBoundingClientRect();
+    if (r.width < 1 || r.height < 1) return;
+    var aspect = r.width / r.height;
+    var d = aspect < 1 ? Math.max(BASE, (6.5 / Math.tan(25 * Math.PI / 180)) / aspect) : BASE;
+    gallery.config.camera.distance = d;
+    gallery.config.dof.focusDistance = d - FOCUS_OFFSET;
+    gallery.config.dof.amount = BLUR * BASE / d;  // the globe looks smaller from further away, so blur less
+    gallery._syncCameraFromConfig();
+  }
+  fit();
+  new ResizeObserver(fit).observe(el);
+</script>
+</body>
+</html>
